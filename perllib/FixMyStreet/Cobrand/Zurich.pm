@@ -850,7 +850,7 @@ sub admin_report_edit {
 
             # Add new update from status_update
             if (my $update = $c->get_param('status_update')) {
-                FixMyStreet::App->model('DB::Comment')->create( {
+                $c->model('DB::Comment')->create( {
                     text => $update,
                     user => $c->user->obj,
                     state => 'unconfirmed',
