@@ -18,10 +18,7 @@ use FindBin;
 use lib "$FindBin::Bin/../perllib";
 use lib "$FindBin::Bin/../commonlib/perllib";
 
-use mySociety::Config;
-BEGIN {
-    mySociety::Config::set_file("$FindBin::Bin/../conf/general");
-}
+use FixMyStreet;
 use mySociety::EmailUtil;
 use mySociety::HandleMail;
 
@@ -32,7 +29,7 @@ forward_on();
 # ---
 
 sub forward_on {
-    my ($l, $d) = split /\@/, mySociety::Config::get('CONTACT_EMAIL');
+    my ($l, $d) = split /\@/, FixMyStreet->config('CONTACT_EMAIL');
     if (mySociety::EmailUtil::EMAIL_SUCCESS
             != mySociety::EmailUtil::send_email(
                 join("\n", @{$data{lines}}) . "\n",
