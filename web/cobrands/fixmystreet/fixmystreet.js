@@ -180,6 +180,58 @@ $(function(){
     //move 'skip this step' link on mobile
     $('.mobile #skip-this-step').addClass('chevron').wrap('<li>').parent().appendTo('#key-tools');
 
+    // Set up the Dropzone image uploader
+    if('Dropzone' in window){
+      Dropzone.autoDiscover = false;
+    }
+    if('Dropzone' in window && $('#form_photo').length){
+      var $originalLabel = $('[for="form_photo"]');
+      var $originalInput = $('#form_photo');
+      var $dropzone = $('<div>').addClass('dropzone');
+
+      $originalLabel.removeAttr('for');
+      $originalInput.hide();
+      $dropzone.insertAfter($originalInput).dropzone({
+        url: '/',
+        maxFiles: 3,
+        addRemoveLinks: true,
+        thumbnailHeight: 150,
+        thumbnailWidth: 150,
+        dictDefaultMessage: "Drag and drop photos here or <u>click to upload</u>",
+        dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
+        fallback: function(){
+          $dropzone.remove();
+          $originalLabel.attr('for', 'form_photo');
+          $originalInput.show();
+        },
+        init: function(){
+          this.on("addedfile", function(file){
+            console.log('file picked:', file.name);
+          });
+          this.on("success", function(file, xhrResponse){
+            console.log('file uploaded:', file.name);
+          });
+          this.on("error", function(file, errorMessage, xhrResponse){
+            console.log('upload failed:', file.name, errorMessage);
+          });
+          this.on("removedfile", function(file){
+            console.log('file removed:', file.name);
+          });
+          this.on("maxfilesexceeded", function(file){
+            this.removeFile(file);
+            var $message = $('<div class="dz-message dz-error-message">');
+            $message.text('Whoa there Testino! Three photos are enough.');
+            $message.prependTo(this.element);
+            setTimeout(function(){
+              $message.slideUp(250, function(){
+                $message.remove();
+              });
+            }, 2000);
+          });
+        }
+      });
+    }
+
     /*
      * Tabs
      */
