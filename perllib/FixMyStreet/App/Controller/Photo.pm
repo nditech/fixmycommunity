@@ -69,7 +69,7 @@ sub index :LocalRegex('^(c/)?(\d+)(?:\.(\d+))?(?:\.(full|tn|fp))?\.jpeg$') {
         $c->detach( 'no_photo' ) if $id =~ /\D/;
         ($item) = $c->cobrand->problems->search( {
             id => $id,
-            state => [ FixMyStreet::DB::Result::Problem->visible_states(), 'partial' ],
+            state => [ FixMyStreet::DB::Result::Problem->visible_states() ],
             photo => { '!=', undef },
         } );
     }
