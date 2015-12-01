@@ -10,7 +10,7 @@ RUN \
 #  add-apt-repository -y ppa:nginx/stable && \
 #  echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu $(lsb_release -cs) main" >> /etc/apt/sources.list && \
 #  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C300EE8 && \
-  apt-get -qq update && apt-get -qq install -y supervisor \
+  apt-get -qq update && \
   DEBIAN_FRONTEND=noninteractive
 #  rm -rf /var/lib/apt/lists/* && \
 
@@ -18,6 +18,9 @@ RUN \
 ADD . /var/www/fixmystreet/fixmystreet
 
 WORKDIR /var/www/fixmystreet/fixmystreet
+
+# Supervisor
+RUN apt-get -qq install -y supervisor
 
 # Language
 RUN apt-get -qq install -y language-pack-en && \
@@ -103,6 +106,6 @@ VOLUME ["/var/www/fixmystreet/fixmystreet"]
 
 EXPOSE 80
 
-CMD ["nginx && /etc/init.d/fixmystreet start"]
-
+# CMD ["nginx"]
+CMD ["/usr/bin/supervisord"]
 #	ENTRYPOINT ["/var/www/fixmystreet/fixmystreet/entrypoint.sh"]
