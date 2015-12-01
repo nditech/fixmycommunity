@@ -94,9 +94,7 @@ sub send {
         From => $self->send_from( $row ),
     };
 
-    my $app = FixMyStreet::App->new( cobrand => $cobrand );
-
-    $cobrand->munge_sendreport_params($app, $row, $h, $params) if $cobrand->can('munge_sendreport_params');
+    $cobrand->munge_sendreport_params($row, $h, $params) if $cobrand->can('munge_sendreport_params');
 
     $params->{Bcc} = $self->bcc if @{$self->bcc};
 

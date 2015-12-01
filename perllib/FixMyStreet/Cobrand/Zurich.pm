@@ -1010,10 +1010,10 @@ sub _admin_send_email {
 }
 
 sub munge_sendreport_params {
-    my ($self, $c, $row, $h, $params) = @_;
+    my ($self, $row, $h, $params) = @_;
     if ($row->state =~ /^(closed|investigating)$/ && $row->get_extra_metadata('publish_photo')) {
         # we attach images to reports sent to external bodies
-        my $photoset = $row->get_photoset($c);
+        my $photoset = $row->get_photoset();
         my @images = $photoset->all_images
             or return;
         my $index = 0;

@@ -653,7 +653,7 @@ order of title.
 
 sub response_templates {
     my $problem = shift;
-    return FixMyStreet::App->model('DB::ResponseTemplate')->search(
+    return $problem->result_source->schema->resultset('ResponseTemplate')->search(
         {
             body_id => $problem->bodies_str_ids
         },
