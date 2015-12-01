@@ -1,0 +1,22 @@
+app:
+  restart: always
+  #build: .
+  image: nditech/finxmystreet:local
+  links:
+    - db:db
+  expose:
+    - 3000
+  ports:
+    - "9000"
+    - "80:80"
+  volumes:
+    - /var/www/fixmystreet
+  #command: bash -c "/var/www/fixmystreet/fixmystreet/script/fixmystreet_app_server.pl -d --fork"
+  command: bash -c "nginx"
+
+db:
+  restart: always
+  image: dalekurt/postgres:9.4
+  ports:
+    - "5432:5432"
+  env_file: db.env

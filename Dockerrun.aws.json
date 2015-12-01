@@ -1,0 +1,16 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Authentication": {
+    "Bucket": "nditech-docker",
+    "Key": "mydockercfg"
+  },
+  "Image": {
+    "Name": "nditech/fixmycommunity:%BUILD_NUM%",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "80"
+    }
+  ]
+}

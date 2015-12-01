@@ -1,0 +1,81 @@
+# circle.yml
+machine:
+  python:
+    version: 2.7.3
+  services:
+    - docker
+  environment:
+    SHORT_SHA: $(echo $CIRCLE_SHA1 | cut -b1-7)
+    TAG_NAME: "$CIRCLE_BRANCH-$SHORT_SHA"
+    IMAGE_PATH: "nditech/fixmycommunity"
+    AWS_REGION: "us-east-1"
+    AWS_KEYNAME: "nditech_docker"
+    AWS_PLATFORM: "docker-1.7.1"
+    AWS_APPLICATION_NAME: "fixmycommunity"
+    AWS_ENVIRONMENT_NAME: "staging"
+
+
+dependencies:
+  override:
+    - pip install awsebcli
+  pre:
+    - docker build -t $IMAGE_PATH:$TAG_NAME .
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+    - docker push "$IMAGE_PATH:$TAG_NAME"
+
+test:
+  override:
+    - docker run -d -p 80:80 $IMAGE_PATH:$TAG_NAME --test; sleep 10
+
+deployment:
+  elasticbeanstalk:
+    branch: staging
+    commands:
+      # Create new Elastic Beanstalk version
+      - mkdir .elasticbeanstalk
+      - touch .elasticbeanstalk/config.yml
+      - chown -R ubuntu.ubuntu .elasticbeanstalk
+      - |
+          cat > .elasticbeanstalk/config.yml << EOF
+            branch-defaults:
+              staging:
+                environment: staging
+            global:
+              application_name: fixmycommunity
+              default_ec2_keyname: nditech_docker
+              default_platform: Docker 1.7.1
+              default_region: us-east-1
+              profile: eb-cli
+              sc: git
+          EOF
+      - sed -i'' -e "s;default;profile eb-cli;g" ~/.aws/config
+      - sed -i'' -e "s;default;eb-cli;g" ~/.aws/credentials
+      - |
+          cat >> ~/.aws/config << EOF
+
+          [default]
+          region = $AWS_REGION
+          EOF
+
+      - sed -i'' -e "s;%BUILD_NUM%;$TAG_NAME;g" ./Dockerrun.aws.json
+      #- cd .deploy && eb init $AWS_APPLICATION_NAME
+      #- cd .deploy && eb init $AWS_APPLICATION_NAME -r $AWS_REGION -k $AWS_KEYNAME -p $AWS_PLATFORM $AWS_ENVIRONMENT_NAME
+
+      #- cd .deploy && eb create $AWS_ENVIRONMENT_NAME -c $AWS_ENVIRONMENT_NAME
+      #- cd .deploy && eb create --instance_type t2.micro --database --database.engine postgresql --database.instance db.t2.micro
+      #- cd .deploy && aws elasticbeanstalk create-application --application-name $AWS_APPLICATION_NAME
+      # - cd .deploy && aws elasticbeanstalk create-environment \
+      #   --application-name $AWS_APPLICATION_NAME \
+      #   --environment-name $AWS_ENVIRONMENT_NAME \
+      #   --cname-prefix $AWS_ENVIRONMENT_NAME \
+      #   --solution-stack-name "$AWS_PLATFORM" \
+      #   --version-label $TAG_NAME \
+      #   --auto-create-application true
+      - eb init $AWS_APPLICATION_NAME
+      # - eb use eb-cli
+      - eb create $AWS_ENVIRONMENT_NAME
+      - eb deploy staging -l $TAG_NAME --timeout 3600
+
+
+
+
