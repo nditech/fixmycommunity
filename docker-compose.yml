@@ -1,7 +1,6 @@
 app:
   restart: always
-  #build: .
-  image: nditech/finxmystreet:local
+  build: .
   links:
     - db:db
   expose:
@@ -12,7 +11,7 @@ app:
   volumes:
     - /var/www/fixmystreet
   #command: bash -c "/var/www/fixmystreet/fixmystreet/script/fixmystreet_app_server.pl -d --fork"
-  command: bash -c "nginx"
+  command: bash -c "nginx && /etc/init.d/fixmystreet start"
 
 db:
   restart: always

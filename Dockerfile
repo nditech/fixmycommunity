@@ -10,7 +10,7 @@ RUN \
 #  add-apt-repository -y ppa:nginx/stable && \
 #  echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu $(lsb_release -cs) main" >> /etc/apt/sources.list && \
 #  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C300EE8 && \
-  apt-get -qq update && \
+  apt-get -qq update && apt-get -qq install -y supervisor \
   DEBIAN_FRONTEND=noninteractive
 #  rm -rf /var/lib/apt/lists/* && \
 
@@ -96,10 +96,13 @@ RUN chmod +x /tmp/install-database.sh
 ADD pgpass /root/.pgpass
 RUN chmod 0600 /root/.pgpass
 
+# Supervisord to start fixmystreet
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 VOLUME ["/var/www/fixmystreet/fixmystreet"]
 
 EXPOSE 80
 
-CMD ["nginx"]
+CMD ["nginx && /etc/init.d/fixmystreet start"]
 
 #	ENTRYPOINT ["/var/www/fixmystreet/fixmystreet/entrypoint.sh"]
