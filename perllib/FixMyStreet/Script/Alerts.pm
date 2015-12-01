@@ -16,6 +16,8 @@ use FixMyStreet::Cobrand;
 use FixMyStreet::DB;
 use FixMyStreet::Email;
 
+FixMyStreet->configure_mysociety_dbhandle;
+
 # Child must have confirmed, id, email, state(!) columns
 # If parent/child, child table must also have name and text
 #   and foreign key to parent must be PARENT_id
