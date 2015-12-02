@@ -23,9 +23,17 @@ WORKDIR /var/www/fixmystreet/fixmystreet
 RUN apt-get -qq install -y supervisor
 
 # Language
-RUN apt-get -qq install -y language-pack-en && \
+RUN apt-get -qq install -y language-pack-en \
+language-pack-ar \
+language-pack-fr \
+language-pack-es \
+language-pack-ru && \
 #  add_locale en_GB && \
   locale-gen en_US.utf8 && \
+  locale-gen ar.UTF-8 && \
+  locale-gen fr_FR.UTF-8 && \
+  locale-gen es_ES.UTF-8 && \
+  locale-gen ru.UTF-8 && \
   echo 'LANG="en_US.UTF-8"' > /etc/default/locale && \
   echo 'LC_ALL="en_US.UTF-8"' >> /etc/default/locale
 
