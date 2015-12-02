@@ -32,7 +32,7 @@ language-pack-ru && \
   locale-gen en_US.utf8 && \
   locale-gen ar.UTF-8 && \
   locale-gen fr_FR.UTF-8 && \
-  locale-gen es_ES.UTF-8 && \
+  locale-gen es.UTF-8 && \
   locale-gen ru.UTF-8 && \
   echo 'LANG="en_US.UTF-8"' > /etc/default/locale && \
   echo 'LC_ALL="en_US.UTF-8"' >> /etc/default/locale
