@@ -35,12 +35,13 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_GB.UTF-8
 
 # Fix for Arabic Language
-RUN sed -i '/ar__AR/d' /var/lib/locales/supported.d/local
-RUN locale-gen --purge && \
-  locale-gen ar && \
-  locale-gen fr_FR.UTF-8 && \
-  locale-gen es.UTF-8 && \
-  locale-gen ru.UTF-8
+# RUN sed -i '/ar__AR/d' /var/lib/locales/supported.d/local
+#RUN \
+  # locale-gen --purge && \
+  # locale-gen ar && \
+  #locale-gen fr_FR.UTF-8 && \
+  #locale-gen es.UTF-8 && \
+  #locale-gen ru.UTF-8
 
 # Add user account
 RUN \
@@ -104,8 +105,8 @@ RUN \
   update-rc.d fixmystreet start 20 2 3 4 5 . stop 20 0 1 6 .
 
 # Copy shell script
-ADD install-database.sh /tmp/install-database.sh
-RUN chmod +x /tmp/install-database.sh
+ADD setup.sh /tmp/setup.sh
+RUN chmod +x /tmp/setup.sh
 ADD pgpass /root/.pgpass
 RUN chmod 0600 /root/.pgpass
 
