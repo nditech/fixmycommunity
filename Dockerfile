@@ -22,15 +22,25 @@ WORKDIR /var/www/fixmystreet/fixmystreet
 # Supervisor
 RUN apt-get -qq install -y supervisor
 
+
+
 # Language
+
 RUN apt-get -qq install -y language-pack-en && \
-#  add_locale en_GB && \
-  locale-gen en_US.utf8 && \
+  locale-gen en_US.UTF-8 && \
   echo 'LANG="en_US.UTF-8"' > /etc/default/locale && \
   echo 'LC_ALL="en_US.UTF-8"' >> /etc/default/locale
 
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_GB.UTF-8
+
+# Fix for Arabic Language
+RUN sed -i '/ar__AR/d' /var/lib/locales/supported.d/local
+RUN locale-gen --purge && \
+  locale-gen ar && \
+  locale-gen fr_FR.UTF-8 && \
+  locale-gen es.UTF-8 && \
+  locale-gen ru.UTF-8
 
 # Add user account
 RUN \
