@@ -55,7 +55,7 @@ EXAMPLE_PLACES: [ 'High Street', 'Main Street' ]
 # <language code>,<pretty name>,<locale>
 LANGUAGES:
   - 'en-gb,English,en_GB'
-	- 'fr,French,fr_FR'
+  - 'fr,French,fr_FR'
   - 'de,German,de_DE'
   - 'es,Spanish,es_ES'
   - 'ar,Arabic,ar_JO'
