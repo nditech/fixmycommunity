@@ -16,6 +16,9 @@ It was created in 2007 by [mySociety](https://www.mysociety.org/) for reporting
 problems to UK councils and has been copied around the world. The FixMyStreet
 Platform is now at version 1.6.1.
 
+##License
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. See <http://www.gnu.org/licenses/>.
+
 ## Installation
 
 We've been working hard to make the FixMyStreet Platform easy to install and
